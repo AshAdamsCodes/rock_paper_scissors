@@ -1,4 +1,4 @@
-//randomly return either "Rock", "Paper", or "Scissors"
+//Have computer randomly return either "Rock", "Paper", or "Scissors"
 function getComputerChoice(){
     randomNum = Math.floor(Math.random()*3);
     if(randomNum === 0){
@@ -10,88 +10,98 @@ function getComputerChoice(){
     }
 }
 
-//Assign the random selection of "Rock", "Paper", or "Scissors" to a variable
-//let computerSelection = getComputerChoice(); 
-
-//Take the player's selection
-//let playerSelection = prompt("Make Your Selection: ");
-
-
-//Make it so that the player Selection is case-insensitive
 
 //Take the player's selection and the computers random choice and play Rock, Paper, Scissors
-//Return the winner
-function roshambo() {
-    computerSelection = getComputerChoice().toUpperCase(); 
-    //let playerSelection = prompt("Make Your Selection: ").toUpperCase();
-    //playerSelection = playerSelection.toUpperCase();
-    //console.log(`Player Selection: ${playerSelection}`)
-    //computerSelection = computerSelection.toUpperCase();
-    console.log(`Computer Selection: ${computerSelection}`);
-    console.log(`Player Selection: ${playerSelection}`);
+//Return the winner of the round
+function roshambo(){
 
+    //Display the computer selection and player selection in DOM
+    const container = document.querySelector("#container");
+    let select = document.createElement('div');
+    select.textContent = `Computer Selection: ${computerSelection} ` + `Player Selection: ${playerSelection}`;
+    container.appendChild(select);
+
+    //Diplay winner of round in DOM
+    let content = document.createElement('div');
+    content.classList.add('content')
     if(computerSelection === "ROCK" && playerSelection === "ROCK"){
-        return "It's a tie";
+        content.textContent =  "It's a tie!";
     }else if(computerSelection === "ROCK" && playerSelection === "PAPER"){
-        return "Player Wins!";
+        content.textContent = "Player Wins! " ;
     }else if(computerSelection === "ROCK" && playerSelection === "SCISSORS"){
-        return "Computer Wins!";
+        content.textContent = "Computer Wins! ";
     }else if(computerSelection === "PAPER" && playerSelection === "PAPER"){
-        return "It's a tie!"
+        content.textContent = "It's a tie! ";
     }else if(computerSelection === "PAPER" && playerSelection === "SCISSORS"){
-        return "Player Wins!";
+        content.textContent = "Player Wins! " ; 
     }else if(computerSelection === "PAPER" && playerSelection === "ROCK"){
-        return "Computer Wins!";
+        content.textContent = "Computer Wins! ";
     }else if(computerSelection === "SCISSORS" && playerSelection === "SCISSORS"){
-        return "It's a tie!";
+        content.textContent = "It's a tie! ";
     }else if(computerSelection === "SCISSORS" && playerSelection === "ROCK"){
-        return "Player Wins!";
+        content.textContent = "Player Wins! ";
     }else if(computerSelection === "SCISSORS" && playerSelection === "PAPER"){
-        return "Computer Wins!";
+        content.textContent = "Computer Wins! ";
     }
+    container.appendChild(content);
+     
   }
 
   //Have players play Roshambo 5 times
   //Keep score of how many times computer and user win a round
   //Create a conditional to indicate who won the game of 5 rounds
 function game() {
+
+    //set beginning score of computer and player to 0
     computerTally = 0; 
     playerTally = 0; 
+    
+    //Have a round of roshambo play every time player click the button "rock", "paper", or "scissors"
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+            playerSelection = button.id.toUpperCase(); 
+            computerSelection = getComputerChoice().toUpperCase();
+            
+            roshambo();
 
-    for(let i = 0; i < 5; i++){
-        playerSelection = prompt("Make Your Selection: ").toUpperCase();
-        roshambo();
+            //Tally the score of each round
+            if(computerSelection === "ROCK" && playerSelection === "PAPER"){
+                playerTally++;
+            }else if(computerSelection === "ROCK" && playerSelection === "SCISSORS"){
+                computerTally++;
+            }else if(computerSelection === "PAPER" && playerSelection === "SCISSORS"){
+                playerTally++;
+            }else if(computerSelection === "PAPER" && playerSelection === "ROCK"){
+                computerTally++;
+            }else if(computerSelection === "SCISSORS" && playerSelection === "ROCK"){
+                playerTally++;
+            }else if(computerSelection === "SCISSORS" && playerSelection === "PAPER"){
+                computerTally++;
+            }
+
+            //Display tally to DOM after each round of roshambo
+            const container = document.querySelector("#container");
+            let tally = document.createElement('div');
+            tally.textContent = `Computer: ${computerTally}, Player: ${playerTally}`;
+            container.appendChild(tally);
         
-        if(computerSelection === "ROCK" && playerSelection === "PAPER"){
-            playerTally++;
-        }else if(computerSelection === "ROCK" && playerSelection === "SCISSORS"){
-            computerTally++;
-        }else if(computerSelection === "PAPER" && playerSelection === "SCISSORS"){
-            playerTally++;
-        }else if(computerSelection === "PAPER" && playerSelection === "ROCK"){
-            computerTally++;
-        }else if(computerSelection === "SCISSORS" && playerSelection === "ROCK"){
-            playerTally++;
-        }else if(computerSelection === "SCISSORS" && playerSelection === "PAPER"){
-            computerTally++;
-        }
-        console.log(`Computer: ${computerTally}, Player: ${playerTally}`);
-    }
+            //Display winner of entire game
+            let displayWinner = document.createElement('div');
+            if(computerTally === 5){
+                displayWinner.textContent = "GAME OVER! COMPUTER WINS";
+                container.appendChild(displayWinner);
+                return; 
+            }else if(playerTally === 5){
+                displayWinner.textContent = "GAME OVER! PLAYER WINS";
+                container.appendChild(displayWinner);
+                return; 
+            }
+            //container.appendChild(displayWinner);
 
-    if(playerTally > computerTally){
-        return "Player Wins!";
-    }else if(computerTally > playerTally){
-        return "Computer Wins!";
-    }else{
-        return "Tie! 1 more round!";
-    }
-
+    
+        })
+    });
 }
 
-
-
-//console.log(`Computer Selection: ${computerSelection}`);
-//console.log(`Player Selection: ${playerSelection}`);
-//console.log(roshambo());
-
-console.log(game());
+game();
